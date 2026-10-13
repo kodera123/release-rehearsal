@@ -1,9 +1,9 @@
 ---
-name: verifying-release
-description: Use when a release branch, release PR, or set of commits is about to ship to production and the user wants pre-release verification — "リリース前検証", "リリース前チェック", "動作確認リストを作って", "エビデンス残して検証して", "スクショ残して", "このままリリースして大丈夫？", "既存データに影響ある？", "デグレしない？", "release readiness". Also invocable as /verifying-release. Skip for single-commit hotfix reviews where the user only wants a code review, and for work still in implementation (verify that with normal implementation checks instead).
+name: release-rehearsal
+description: Rehearses a release under production-like conditions (existing dirty data, old and new code running side by side during rollout, jobs already queued), saves screenshots and logs as evidence files, and returns a Go / Conditional Go / No-Go verdict. Use when a release branch, release PR, or set of commits is about to ship to production and the user wants pre-release verification — "リリース前検証", "リリース前チェック", "動作確認リストを作って", "エビデンス残して検証して", "スクショ残して", "このままリリースして大丈夫？", "既存データに影響ある？", "デグレしない？", "release readiness". Also invocable as /release-rehearsal. Skip for single-commit hotfix reviews where the user only wants a code review, and for work still in implementation (verify that with normal implementation checks instead).
 ---
 
-# Verifying Release
+# Release Rehearsal
 
 リリース対象の差分に対して、**動作確認リスト → 十分性レビュー → エビデンス付き実行 → 既存データ/機能の影響判定** を行い、Go / 条件付き Go / No-Go を根拠付きで渡す。
 
@@ -44,7 +44,7 @@ description: Use when a release branch, release PR, or set of commits is about t
   - **性能確認を含めるか（オプション）**。含める場合は risk-catalog の「性能」節を使う。含めない場合はレポートに「性能確認: 対象外（ユーザー判断）」と書く
 - 返事が来ないまま進める場合は、前提を**「仮定: 〜（未確認）」としてレポートに明記**し、その仮定に依存する判定は Go にしない
 - **所要時間を見積もる**（根拠: 項目数 × 1 項目あたりの想定時間 + 環境準備。見積もりの式ごと伝える）。残り時間で Step 5 まで終わらないなら、この時点で「判定の上限は条件付き Go」とユーザーに伝える（「急いでいるので結論だけ」と言われても、未確認を Go に丸めない）
-- エビデンス保存先を決める: `<repo>/tmp/release-verification/<YYYYMMDD>-<ref>/`（`git check-ignore` で ignore 済みを確認。されていなければ repo の外の `~/release-verification/<repo名>/<YYYYMMDD>-<ref>/`）
+- エビデンス保存先を決める: `<repo>/tmp/release-rehearsal/<YYYYMMDD>-<ref>/`（`git check-ignore` で ignore 済みを確認。されていなければ repo の外の `~/release-rehearsal/<repo名>/<YYYYMMDD>-<ref>/`）
 
 ### Step 1: 差分の棚卸し
 

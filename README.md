@@ -1,10 +1,12 @@
-# verifying-release
+# release-rehearsal
 
-リリース前に「このまま本番に出して大丈夫か」を、エビデンス付きで判定する [Claude Code](https://claude.com/claude-code) 用の Agent Skill です。
+リリースを**本番さながらの条件で通しで試し**、「このまま本番に出して大丈夫か」をエビデンス付きで判定する [Claude Code](https://claude.com/claude-code) 用の Agent Skill です。
+
+ここでいうリハーサルは、デプロイ作業の手順を練習することではありません。既存の汚いデータ・新旧コードの混在・溜まっているジョブといった、本番にしかない条件をローカルや staging に再現して、リリースするコードが壊れないかを確かめることです。
 
 結論は **Go / 条件付き Go / No-Go** のどれかで、必ず根拠を添えて返します。
 
-> A Claude Code skill for pre-release verification. It builds a risk-driven test list from the diff, has an independent subagent check it for gaps, runs it while saving screenshots and logs as files, reproduces production-like "dirty data" before migrating, and returns a Go / Conditional Go / No-Go verdict with evidence. The skill text is written in Japanese.
+> A Claude Code skill that rehearses a release under production-like conditions — not a dry run of the deploy steps, but a test of the code against what only production has: existing dirty data, old and new code running side by side, jobs already queued. It builds a risk-driven test list from the diff, has an independent subagent check it for gaps, runs it while saving screenshots and logs as files, reproduces production-like "dirty data" before migrating, and returns a Go / Conditional Go / No-Go verdict with evidence. The skill text is written in Japanese.
 
 ## 何をするか
 
@@ -47,11 +49,11 @@
 ## インストール
 
 ```bash
-git clone https://github.com/kodera123/verifying-release.git
+git clone https://github.com/kodera123/release-rehearsal.git
 ```
 
 ```bash
-cp -R verifying-release/skills/verifying-release ~/.claude/skills/
+cp -R release-rehearsal/skills/release-rehearsal ~/.claude/skills/
 ```
 
 プロジェクト単位で使う場合は、`~/.claude/skills/` の代わりに `<project>/.claude/skills/` に置きます。
@@ -61,12 +63,12 @@ cp -R verifying-release/skills/verifying-release ~/.claude/skills/
 Claude Code で次のように頼むと起動します。
 
 ```
-/verifying-release v1.4.0..release/1.5.0 をリリース前検証して
+/release-rehearsal v1.4.0..release/1.5.0 をリリース前検証して
 ```
 
 「リリース前チェック」「このままリリースして大丈夫？」「既存データに影響ある？」「デグレしない？」などでも起動します。
 
-エビデンスとレポートは `<repo>/tmp/release-verification/<YYYYMMDD>-<ref>/` に保存されます（gitignore されていない場合は `~/release-verification/<repo名>/...`）。
+エビデンスとレポートは `<repo>/tmp/release-rehearsal/<YYYYMMDD>-<ref>/` に保存されます（gitignore されていない場合は `~/release-rehearsal/<repo名>/...`）。
 
 ```
 <保存先>/
@@ -78,7 +80,7 @@ Claude Code で次のように頼むと起動します。
 ## ファイル構成
 
 ```
-skills/verifying-release/
+skills/release-rehearsal/
 ├── SKILL.md                    # 手順・鉄則・判定基準
 └── reference/
     ├── risk-catalog.md         # 変更種別ごとのリスク・確認方法・汚いデータ・本番確認クエリ
